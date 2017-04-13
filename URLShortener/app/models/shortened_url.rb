@@ -68,14 +68,15 @@ class ShortenedUrl < ActiveRecord::Base
   end
 
   def no_spamming
-    if Time.now - submitter.submitted_urls[-5].created_at < 60
+    if submitter.submitted_urls.count > 5 &&
+      Time.now - submitter.submitted_urls[-5].created_at < 60
       errors[:base] << "No spamming"
       puts "No spammin"
     end
   end
 
   def nonpremium_max
-    if submitter.submitted_urls.count > 5 && !submitter.premium
+    if submitter.submitted_urls.count > 5 && submitter.premium = false
       errors[:base] << "Reached maximum submission limit"
       puts "Reached maximum submission limit"
     end
